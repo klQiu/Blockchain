@@ -1,0 +1,3 @@
+# ignore chaindata and bootnode key
+chaindata/*
+bootnode/*

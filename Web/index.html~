@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>FogChain Project</h1>
+
+        <h2 id="screen1"></h2>
+        
+        <h3 id="screen2"></h3>
+        
+        <p id="screen3"></p>
+        
+        <p id="screen4"></p>
+        
+        <p id="screen5"></p>
+
+	     <p id="screen6"></p>
+ 
+        <hr>
+
+        <img id="loader" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif">
+
+        <button id="button1">GET CURRENT SEQUENCE</button>
+        
+        <button id="button2">GET NUMBER OF PARTICIPANTS</button>
+        
+        <button id="button3">GET ADDRESSES</button>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+       if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+	web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var FogContract = web3.eth.contract([{"name": "TIME_START", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"name": "POWER_STATION", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint8"}], "type": "function"}, {"name": "kill", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [], "outputs": [], "type": "function"}, {"name": "prosumer_addrs", "stateMutability": "view", "payable": false, "constant": true, "inputs": [{"name": "", "type": "uint256"}], "outputs": [{"name": "", "type": "address"}], "type": "function"}, {"name": "RETAILER", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint8"}], "type": "function"}, {"name": "consumer_addrs", "stateMutability": "view", "payable": false, "constant": true, "inputs": [{"name": "", "type": "uint256"}], "outputs": [{"name": "", "type": "address"}], "type": "function"}, {"name": "latest_price", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"name": "pure_consumer_addrs", "stateMutability": "view", "payable": false, "constant": true, "inputs": [{"name": "", "type": "uint256"}], "outputs": [{"name": "", "type": "address"}], "type": "function"}, {"name": "power_station_addrs", "stateMutability": "view", "payable": false, "constant": true, "inputs": [{"name": "", "type": "uint256"}], "outputs": [{"name": "", "type": "address"}], "type": "function"}, {"name": "SEQUENCE_INV", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"name": "PROSUMER", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint8"}], "type": "function"}, {"name": "CONSUMER", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint8"}], "type": "function"}, {"name": "retailer_addrs", "stateMutability": "view", "payable": false, "constant": true, "inputs": [{"name": "", "type": "uint256"}], "outputs": [{"name": "", "type": "address"}], "type": "function"}, {"name": "UNRENEWABLE_PRICE", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"name": "last_settlement", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"name": "account_map", "stateMutability": "view", "payable": false, "constant": true, "inputs": [{"name": "", "type": "address"}], "outputs": [{"name": "role", "type": "uint8"}, {"name": "consumption", "type": "uint256"}, {"name": "output", "type": "uint256"}, {"name": "bill", "type": "int256"}], "type": "function"}, {"name": "RENEWABLE_PRICE", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"inputs": [{"name": "seq_blk_interval", "type": "uint256"}, {"name": "renew_price", "type": "uint256"}, {"name": "unre_price", "type": "uint256"}], "stateMutability": "nonpayable", "payable": false, "type": "constructor"}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "cons_addr", "type": "address"}, {"indexed": false, "name": "cons", "type": "uint256"}], "anonymous": false, "name": "ConsEvent", "type": "event"}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "prod_addr", "type": "address"}, {"indexed": false, "name": "prod", "type": "uint256"}], "anonymous": false, "name": "ProdEvent", "type": "event"}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "sell_addr", "type": "address"}, {"indexed": false, "name": "sold", "type": "uint256"}], "anonymous": false, "name": "SellEvent", "type": "event"}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "role", "type": "uint256"}, {"indexed": true, "name": "account_addr", "type": "address"}, {"indexed": false, "name": "consumption", "type": "uint256"}, {"indexed": false, "name": "output", "type": "uint256"}, {"indexed": false, "name": "expense", "type": "int256"}], "anonymous": false, "name": "SettleEvent", "type": "event"}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "ps_addr", "type": "address"}, {"indexed": false, "name": "generation", "type": "uint256"}], "anonymous": false, "name": "PsGenEvent", "type": "event"}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": false, "name": "c_price", "type": "uint256"}, {"indexed": false, "name": "ps_price", "type": "uint256"}, {"indexed": false, "name": "bs_price", "type": "uint256"}, {"indexed": false, "name": "p_price", "type": "uint256"}], "anonymous": false, "name": "PriceEvent", "type": "event"}, {"name": "get_current_seqnum", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "seqnum", "type": "uint256"}], "type": "function"}, {"name": "get_last_settlement", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "seqnum", "type": "uint256"}], "type": "function"}, {"name": "get_bill", "stateMutability": "view", "payable": false, "constant": true, "inputs": [{"name": "account", "type": "address"}], "outputs": [{"name": "expense", "type": "int256"}], "type": "function"}, {"name": "register_consumer", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [], "outputs": [], "type": "function"}, {"name": "register_prosumer", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [], "outputs": [], "type": "function"}, {"name": "register_battery_station", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [], "outputs": [], "type": "function"}, {"name": "register_power_station", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [], "outputs": [], "type": "function"}, {"name": "post_cons", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [{"name": "amount", "type": "uint256"}], "outputs": [{"name": "seqnum", "type": "uint256"}, {"name": "cons", "type": "uint256"}], "type": "function"}, {"name": "post_prod", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [{"name": "amount", "type": "uint256"}], "outputs": [{"name": "seqnum", "type": "uint256"}, {"name": "prod", "type": "uint256"}], "type": "function"}, {"name": "post_sell", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [{"name": "amount", "type": "uint256"}], "outputs": [{"name": "seqnum", "type": "uint256"}, {"name": "sold", "type": "uint256"}], "type": "function"}, {"name": "post_ps_gen", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [{"name": "amount", "type": "uint256"}], "outputs": [{"name": "seqnum", "type": "uint256"}, {"name": "generation", "type": "uint256"}], "type": "function"}, {"name": "settle", "stateMutability": "nonpayable", "payable": false, "constant": false, "inputs": [], "outputs": [{"name": "seqnum", "type": "uint256"}], "type": "function"}, {"name": "get_consumer_addresses", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "address[]"}], "type": "function"}, {"name": "get_prosumer_addresses", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "address[]"}], "type": "function"}, {"name": "get_retailer_addresses", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "address[]"}], "type": "function"}, {"name": "get_ps_addresses", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "address[]"}], "type": "function"}, {"name": "get_address_number", "stateMutability": "view", "payable": false, "constant": true, "inputs": [], "outputs": [{"name": "", "type": "uint256"}], "type": "function"}])
+        var Fogchain = FogContract.at('0x02f4f0ff1ead8a211677813608c5ff669558464f');
+        var prosumer_addr;
+        var consumer_addr;
+        var ps_addr;
+        var retailer_addr;
+
+$("#button1").click(function() {
+    $("#loader").show();
+	Fogchain.get_current_seqnum(function(error, result){
+            if(!error)
+                {
+                    $("#screen1").html('Current sequence number: ' + result['c']);
+                    $("#loader").hide();
+                    console.log(result['c']);
+                }
+            else
+                console.error(error);
+        });
+});
+$("#button2").click(function() {
+    $("#loader").show();
+	Fogchain.get_address_number(function(error, result){
+            if(!error)
+                {
+                    $("#screen2").html('There are ' + result['c'] + ' participants right now.');
+                    $("#loader").hide();
+                    console.log(result['c']);
+                }
+            else
+                console.error(error);
+        });
+});
+$("#button3").click(function() {
+    $("#loader").show();
+	Fogchain.get_consumer_addresses(function(error, result){
+            if(!error)
+                {
+						  consumer_addr = result;
+						  if(result.length != 0) {
+                    web3.eth.getBalance(consumer_addr, function(error, result1){
+            					if(!error)
+                					{
+                    					$("#screen3").html('Consumer address: ' + consumer_addr + ', Balance: '+ result1);
+                    					$("#loader").hide();
+                					}
+            					else
+                					console.error(error);
+        					});    
+        					}    
+        					else{
+        						         $("#screen3").html('No consumer');
+                    					$("#loader").hide();
+        					}            
+                }
+            else
+                console.error(error);
+        });
+        
+        
+        Fogchain.get_prosumer_addresses(function(error, result){
+            if(!error)
+                {
+                    prosumer_addr = result;
+                    if(result.length != 0) {
+                    web3.eth.getBalance(prosumer_addr, function(error, result1){
+            					if(!error)
+                					{
+                    					$("#screen4").html('Prosumer address: ' + prosumer_addr + ', Balance: '+ result1);
+                    					$("#loader").hide();
+                					}
+            					else
+                					console.error(error);
+        					});
+        					}
+        					else{
+        						         $("#screen4").html('No prosumer');
+                    					$("#loader").hide();
+        					}  
+                }
+            else
+                console.error(error);
+        });
+       
+       
+        Fogchain.get_retailer_addresses(function(error, result){
+            if(!error)
+                {
+                    retailer_addr = result;
+                    if(result.length != 0) {
+                    web3.eth.getBalance(retailer_addr, function(error, result1){
+            					if(!error)
+                					{
+                    					$("#screen5").html('Retailer address: ' + retailer_addr + ', Balance: '+ result1);
+                    					$("#loader").hide();
+                					}
+            					else
+                					console.error(error);
+        					});
+        					}
+        					else{
+        						         $("#screen5").html('No retailer');
+                    					$("#loader").hide();
+        					}
+                }
+            else
+                console.error(error);
+        });
+        
+        
+        Fogchain.get_ps_addresses(function(error, result){
+            if(!error)
+                {
+                    ps_addr = result;
+                    if(result.length != 0) {
+                    werb3.eth.getBalance(ps_addr, function(error, result1){
+            					if(!error)
+                					{
+                    					$("#screen6").html('Power station address: ' + ps_addr + ', Balance: '+ result1);
+                    					$("#loader").hide();
+                					}
+            					else
+                					console.error(error);
+        					});
+        					}
+        					else{
+        						         $("#screen6").html('No power station');
+                    					$("#loader").hide();
+        					}
+                }
+            else
+                console.error(error);
+        });
+});
+    </script>
+
+</body>
+</html>
