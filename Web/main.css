@@ -46,6 +46,10 @@ button {
     padding:25px;
     background-color:#fff;
 }
+#screen7 {
+    padding:25px;
+    background-color:#fff;
+}
 #loader {
     width: 100px;
     display:none;

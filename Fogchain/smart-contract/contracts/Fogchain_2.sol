@@ -57,6 +57,10 @@ contract Fogchain_2 is Mortal {
     address[] public prosumer_addrs;
     address[] public retailer_addrs;
     address[] public power_station_addrs;
+    
+    mapping(address => uint) cons_map;
+    mapping(address => uint) pros_map;
+    mapping(address => int) expense_map;
 
     event ConsEvent(uint indexed seqnum, address indexed cons_addr, uint cons);
     event ProdEvent(uint indexed seqnum, address indexed prod_addr, uint prod);
@@ -257,6 +261,9 @@ contract Fogchain_2 is Mortal {
             emit SettleEvent(cur_seqnum-1, POWER_STATION, power_station_addrs[0], 
                 account_map[power_station_addrs[0]].consumption, ps_sum, expense);
             logged_map[power_station_addrs[0]] = true;
+            cons_map[power_station_addrs[0]] = account_map[power_station_addrs[0]].consumption;
+            pros_map[power_station_addrs[0]] = ps_sum;
+            expense_map[power_station_addrs[0]] = expense;
         }
         /* TODO END */
 
@@ -269,6 +276,9 @@ contract Fogchain_2 is Mortal {
             account_map[retailer_addrs[i]].bill += expense;
             emit SettleEvent(cur_seqnum-1, RETAILER, retailer_addrs[i], consumption, output, expense);
             logged_map[retailer_addrs[i]] = true;
+            cons_map[retailer_addrs[i]] = consumption;
+            pros_map[retailer_addrs[i]] = output;
+            expense_map[retailer_addrs[i]] = expense;
         }
 
         // emit event for prosumers
@@ -280,6 +290,9 @@ contract Fogchain_2 is Mortal {
             account_map[prosumer_addrs[i]].bill += expense;
             emit SettleEvent(cur_seqnum-1, PROSUMER, prosumer_addrs[i], consumption, output, expense);
             logged_map[prosumer_addrs[i]] = true;
+            cons_map[prosumer_addrs[i]] = consumption;
+            pros_map[prosumer_addrs[i]] = output;
+            expense_map[prosumer_addrs[i]] = expense;
         }
 
         // emit event for consumers who are not battery stations, prosumers or power stations
@@ -294,6 +307,9 @@ contract Fogchain_2 is Mortal {
             else{
                 expense = int(c_price*consumption);
                 emit SettleEvent(cur_seqnum-1, CONSUMER, consumer_addrs[i], consumption, 0, expense);
+                cons_map[consumer_addrs[i]] = consumption;
+                pros_map[consumer_addrs[i]] = 0;
+                expense_map[consumer_addrs[i]] = expense;
             }
             account_map[consumer_addrs[i]].output = 0;
             account_map[consumer_addrs[i]].consumption = 0;
@@ -337,5 +353,19 @@ contract Fogchain_2 is Mortal {
         returns (uint)
     {
         return consumer_addrs.length;
+    }
+
+    //get consumption, output and bill of the address
+    function get_info(address account) constant public
+	returns (uint, uint, int)
+    {
+	return (cons_map[account], pros_map[account], expense_map[account]); 
+    }
+
+    //get battery station sale price
+    function get_sale_price() view public
+	returns (uint)
+    {
+	return latest_price;
     }
 }

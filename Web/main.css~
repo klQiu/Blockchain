@@ -37,17 +37,18 @@ button {
 #screen4 {
     padding:25px;
     background-color:#fff;
-    margin: 1em 0;
 }
 #screen5 {
     padding:25px;
     background-color:#fff;
-    margin: 1em 0;
 }
 #screen6 {
     padding:25px;
     background-color:#fff;
-    margin: 1em 0;
+}
+#screen7 {
+    padding:40px;
+    background-color:#fff;
 }
 #loader {
     width: 100px;
