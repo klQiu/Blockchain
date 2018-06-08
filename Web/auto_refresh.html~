@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>FogChain Project</h1>
+
+        <h2 id="screen1"></h2>
+        
+        <h3 id="screen2"></h3>
+        
+        <h3 id="screen7"></h3>        
+        
+        <p id="screen3"></p>
+        
+        <p id="screen4"></p>
+        
+        <p id="screen5"></p>
+
+	     <p id="screen6"></p>
+ 
+        <hr>
+
+        <img id="loader" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif">
+
+        <button id="button1">Start Monitoring</button>
+        
+        <button id="button3">Start Monitoring</button>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+       if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://172.22.155.233:8545"));    //http://localhost:8545
+        }
+
+	web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var FogContract = web3.eth.contract([{"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "TIME_START", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint8", "name": ""}], "name": "POWER_STATION", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [], "name": "kill", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [{"type": "uint256", "name": ""}], "outputs": [{"type": "address", "name": ""}], "name": "prosumer_addrs", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint8", "name": ""}], "name": "RETAILER", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "uint256", "name": ""}], "outputs": [{"type": "address", "name": ""}], "name": "consumer_addrs", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "latest_price", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "uint256", "name": ""}], "outputs": [{"type": "address", "name": ""}], "name": "pure_consumer_addrs", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "uint256", "name": ""}], "outputs": [{"type": "address", "name": ""}], "name": "power_station_addrs", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "SEQUENCE_INV", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint8", "name": ""}], "name": "PROSUMER", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint8", "name": ""}], "name": "CONSUMER", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "uint256", "name": ""}], "outputs": [{"type": "address", "name": ""}], "name": "retailer_addrs", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "UNRENEWABLE_PRICE", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "last_settlement", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "address", "name": ""}], "outputs": [{"type": "uint8", "name": "role"}, {"type": "uint256", "name": "consumption"}, {"type": "uint256", "name": "output"}, {"type": "int256", "name": "bill"}], "name": "account_map", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "RENEWABLE_PRICE", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "uint256", "name": "seq_blk_interval"}, {"type": "uint256", "name": "renew_price"}, {"type": "uint256", "name": "unre_price"}], "type": "constructor", "stateMutability": "nonpayable", "payable": false}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "cons_addr", "type": "address"}, {"indexed": false, "name": "cons", "type": "uint256"}], "type": "event", "name": "ConsEvent", "anonymous": false}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "prod_addr", "type": "address"}, {"indexed": false, "name": "prod", "type": "uint256"}], "type": "event", "name": "ProdEvent", "anonymous": false}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "sell_addr", "type": "address"}, {"indexed": false, "name": "sold", "type": "uint256"}], "type": "event", "name": "SellEvent", "anonymous": false}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "role", "type": "uint256"}, {"indexed": true, "name": "account_addr", "type": "address"}, {"indexed": false, "name": "consumption", "type": "uint256"}, {"indexed": false, "name": "output", "type": "uint256"}, {"indexed": false, "name": "expense", "type": "int256"}], "type": "event", "name": "SettleEvent", "anonymous": false}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": true, "name": "ps_addr", "type": "address"}, {"indexed": false, "name": "generation", "type": "uint256"}], "type": "event", "name": "PsGenEvent", "anonymous": false}, {"inputs": [{"indexed": true, "name": "seqnum", "type": "uint256"}, {"indexed": false, "name": "c_price", "type": "uint256"}, {"indexed": false, "name": "ps_price", "type": "uint256"}, {"indexed": false, "name": "bs_price", "type": "uint256"}, {"indexed": false, "name": "p_price", "type": "uint256"}], "type": "event", "name": "PriceEvent", "anonymous": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": "seqnum"}], "name": "get_current_seqnum", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": "seqnum"}], "name": "get_last_settlement", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "address", "name": "account"}], "outputs": [{"type": "int256", "name": "expense"}], "name": "get_bill", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [], "name": "register_consumer", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [], "outputs": [], "name": "register_prosumer", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [], "outputs": [], "name": "register_battery_station", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [], "outputs": [], "name": "register_power_station", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [{"type": "uint256", "name": "amount"}], "outputs": [{"type": "uint256", "name": "seqnum"}, {"type": "uint256", "name": "cons"}], "name": "post_cons", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [{"type": "uint256", "name": "amount"}], "outputs": [{"type": "uint256", "name": "seqnum"}, {"type": "uint256", "name": "prod"}], "name": "post_prod", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [{"type": "uint256", "name": "amount"}], "outputs": [{"type": "uint256", "name": "seqnum"}, {"type": "uint256", "name": "sold"}], "name": "post_sell", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [{"type": "uint256", "name": "amount"}], "outputs": [{"type": "uint256", "name": "seqnum"}, {"type": "uint256", "name": "generation"}], "name": "post_ps_gen", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": "seqnum"}], "name": "settle", "type": "function", "constant": false, "stateMutability": "nonpayable", "payable": false}, {"inputs": [], "outputs": [{"type": "address[]", "name": ""}], "name": "get_consumer_addresses", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "address[]", "name": ""}], "name": "get_prosumer_addresses", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "address[]", "name": ""}], "name": "get_retailer_addresses", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "address[]", "name": ""}], "name": "get_ps_addresses", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "get_address_number", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [{"type": "address", "name": "account"}], "outputs": [{"type": "uint256", "name": ""}, {"type": "uint256", "name": ""}, {"type": "int256", "name": ""}], "name": "get_info", "type": "function", "constant": true, "stateMutability": "view", "payable": false}, {"inputs": [], "outputs": [{"type": "uint256", "name": ""}], "name": "get_sale_price", "type": "function", "constant": true, "stateMutability": "view", "payable": false}])
+        var Fogchain = FogContract.at('0xc5f0ba0c25b54e94c897a9e63e42e47ac00f3388');
+        var prosumer_addr;
+        var consumer_addr;
+        var ps_addr;
+        var retailer_addr;
+
+$("#button1").click(function() {
+    $("#loader").show();
+	Fogchain.get_current_seqnum(function(error, result){
+            if(!error)
+                {
+                    $("#screen1").html('Current sequence number: ' + result['c']);
+                    $("#loader").hide();
+                }
+            else
+                console.error(error);
+        });
+        
+		  	Fogchain.get_address_number(function(error, result){
+            if(!error)
+                {
+                    $("#screen2").html('There are ' + result['c'] + ' participants right now.');
+                    $("#loader").hide();
+                }
+            else
+                console.error(error);
+        });
+        	Fogchain.get_sale_price(function(error, result){
+            if(!error)
+                {
+                    $("#screen7").html('Sale price for prosumer: 800 wei/Joul, Sale price for battery station: '+ result['c'] + ' wei/Joul, Sale price for power station: 1000 wei/Joul');
+                    $("#loader").hide();
+                }
+            else
+                console.error(error);
+        });
+        
+        Fogchain.get_consumer_addresses(function(error, result){
+            if(!error)
+                {
+						  consumer_addr = result;
+						  if(result.length != 0) {
+                    web3.eth.getBalance(consumer_addr, function(error, result1){
+            					if(!error)
+                					{
+                    					Fogchain.get_info(consumer_addr, function(error, result2){
+            								if(!error)
+                								{
+                    								$("#screen3").html('Consumer address: ' + consumer_addr + ', Balance: '+ result1 + ', Consumption: ' + result2[0]['c'] +  ', Output: ' + result2[1]['c'] + ", Expense: "+ result2[2]['c']);
+                    								$("#loader").hide();
+                								}
+												else
+                								console.error(error);
+        								}); 
+        								}
+            					else
+                					console.error(error);
+        					});    
+        					}    
+        					else{
+        						         $("#screen3").html('No consumer');
+                    					$("#loader").hide();
+        					}            
+                }
+            else
+                console.error(error);
+        });        
+        
+		  Fogchain.get_prosumer_addresses(function(error, result){
+            if(!error)
+                {
+                    prosumer_addr = result;
+                    if(result.length != 0) {
+                    web3.eth.getBalance(prosumer_addr, function(error, result1){
+            					if(!error)
+                					{
+                    					Fogchain.get_info(prosumer_addr, function(error, result2){
+            								if(!error)
+                								{
+                    								$("#screen4").html('Prosumer address: ' + prosumer_addr + ', Balance: '+ result1 + ', Consumption: ' + result2[0]['c'] +  ', Output: ' + result2[1]['c'] + ", Expense: "+ result2[2]['c']);
+                    								$("#loader").hide();
+                								}
+												else
+                								console.error(error);
+        								}); 
+                					}
+            					else
+                					console.error(error);
+        					});
+        					}
+        					else{
+        						         $("#screen4").html('No prosumer');
+                    					$("#loader").hide();
+        					}  
+                }
+            else
+                console.error(error);
+        });        
+         
+        Fogchain.get_retailer_addresses(function(error, result){
+            if(!error)
+                {
+                    retailer_addr = result;
+                    if(result.length != 0) {
+                    web3.eth.getBalance(retailer_addr, function(error, result1){
+            					if(!error)
+                					{
+											Fogchain.get_info(retailer_addr, function(error, result2){
+            								if(!error)
+                								{
+                    								$("#screen5").html('Retailer address: ' + retailer_addr + ', Balance: '+ result1 + ', Consumption: ' + result2[0]['c'] +  ', Output: ' + result2[1]['c'] + ", Expense: "+ result2[2]['c']);
+                    								$("#loader").hide();
+                								}
+												else
+                								console.error(error);
+        								}); 
+                					}
+            					else
+                					console.error(error);
+        					});
+        					}
+        					else{
+        						         $("#screen5").html('No retailer');
+                    					$("#loader").hide();
+        					}
+                }
+            else
+                console.error(error);
+        });         
+         
+         
+         Fogchain.get_ps_addresses(function(error, result){
+            if(!error)
+                {
+                    ps_addr = result;
+                    if(result.length != 0) {
+                    web3.eth.getBalance(ps_addr, function(error, result1){
+            					if(!error)
+                					{
+												Fogchain.get_info(ps_addr, function(error, result2){
+            								if(!error)
+                								{
+                    								$("#screen6").html('Power station address: ' + ps_addr + ', Balance: '+ result1 + ', Consumption: ' + result2[0]['c'] +  ', Output: ' + result2[1]['c'] + ", Expense: "+ result2[2]['c']);
+                    								$("#loader").hide();
+                								}
+												else
+                								console.error(error);
+        								}); 
+                					}
+            					else
+                					console.error(error);
+        					});
+        					}
+        					else{
+        						         $("#screen6").html('No power station');
+                    					$("#loader").hide();
+        					}
+                }
+            else
+                console.error(error);
+        });
+        
+        setTimeout(arguments.callee, 5000);
+});
+
+    </script>
+
+</body>
+</html>
